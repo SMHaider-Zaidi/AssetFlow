@@ -1,0 +1,161 @@
+<%- include('partials/header') %>
+
+<div class="min-h-screen font-sans flex flex-col bg-[#FFFFFF] text-[#1F2937]">
+    
+    <header class="bg-white py-6 px-10">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <div class="w-8 h-8 rounded-lg flex items-center justify-center overflow-hidden">
+                    <img 
+                        src="/images/AssetFlowLogo.png" 
+                        alt="AssetFlow Logo" 
+                        class="w-full h-full object-contain"
+                    >
+                </div>
+                <span class="text-xl font-black tracking-tight text-[#111827]">AssetFlow</span>
+            </div>
+            
+            <nav class="flex items-center space-x-10 text-sm font-bold uppercase tracking-widest text-[#6B7280]">
+                <a href="#about" class="hover:text-[#0F766E] transition-colors">About</a>
+                <a href="#contact" class="hover:text-[#0F766E] transition-colors">Contact</a>
+                 <a href="/login" class="underline decoration-[#0F766E] text-[#0F766E] transition-colors">Login</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="relative pt-12 pb-32 px-10 overflow-hidden border-b border-slate-50">
+        <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center relative z-10">
+            
+            <div class="space-y-8">
+                <h2 class="text-6xl font-black text-[#111827] leading-[1.1] tracking-tight">
+                    Everything Your Assets Need, <br>
+                    <span class="text-[#0F766E]">In One System</span>
+                </h2>
+
+                <p class="text-[#6B7280] text-lg leading-relaxed max-w-lg">
+                    Experience the future of organizational resource management. Leveraging advanced lifecycle tracking, multi-tenant architecture, and automated maintenance scheduling for seamless and secure operations.
+                </p>
+                
+            
+            </div>
+
+            <div class="relative flex justify-center">
+                <div class="w-full max-w-xl">
+                    <img 
+                        src="/images/AssetFlowIllustration.png" 
+                        alt="Asset Management Illustration"
+                        class="w-full h-auto drop-shadow-2xl mr-16"
+                    >
+             </div>
+            </div>
+        </div>
+
+        
+    </section>
+
+    <section id="access" class="bg-[#F0FDFA] py-20 px-10">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl font-black mb-6 tracking-tight text-[#0F766E]">Access Your Workspace</h2>
+            <div class="grid md:grid-cols-2 gap-12">
+                <div class="bg-white p-10 rounded-2xl shadow-sm border border-[#CCFBF1] flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-2xl font-black text-[#111827] mb-4">Register Organization</h3>
+                        <p class="text-[#6B7280] leading-relaxed mb-8">
+                            Establish a dedicated workspace for your enterprise. Define administrative control, manage multi-tenant permissions, and begin tracking your organizational infrastructure today.
+                        </p>
+                    </div>
+                    <div class="flex space-x-4">
+                        <a href="/register" class="flex-1 text-center bg-[#0F766E] text-white py-4 rounded-xl font-bold hover:bg-[#14B8A6] transition-all">New Organization</a>
+                    </div>
+                </div>
+
+                <div class="bg-white p-10 rounded-2xl shadow-xl flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-2xl font-black text-black mb-4">System Access</h3>
+                        <p class="text-slate-400 leading-relaxed mb-8">
+                            Continue your workflow and manage active asset lifecycles. Access your global dashboard to review maintenance schedules and immutable audit logs.
+                        </p>
+                    </div>
+                    <a href="/login" class="block text-center bg-[#0F766E]  text-white py-4 rounded-xl font-bold hover:bg-[#14B8A6] transition-all">Log In to Account</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="bg-[#134E4A] py-24 px-10 text-white">
+        <div class="max-w-7xl mx-auto">
+            <div class="max-w-3xl mb-16">
+                <h2 class="text-4xl font-black mb-6 tracking-tight text-[#F0FDFA]">The Platform</h2>
+                <p class="text-teal-100 text-lg leading-relaxed opacity-80">
+                    AssetFlow is engineered for organizations that demand rigorous asset accountability and optimized resource allocation. We eliminate operational complexity by providing a unified, secure system to track and audit every operational resource across your entire organizational infrastructure.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-white/5 p-8 rounded-xl border border-white/10 hover:bg-white/10 transition-all">
+                    <h4 class="font-bold text-[#14B8A6] mb-3 uppercase text-[10px] tracking-[0.2em]">Multi-Tenant Architecture</h4>
+                    <p class="text-sm text-[#F0FDFA] leading-relaxed opacity-90">Ensure complete data isolation across multiple departments or organizations within a single secure environment.</p>
+                </div>
+                <div class="bg-white/5 p-8 rounded-xl border border-white/10 hover:bg-white/10 transition-all">
+                    <h4 class="font-bold text-[#14B8A6] mb-3 uppercase text-[10px] tracking-[0.2em]">Global Audit Logging</h4>
+                    <p class="text-sm text-[#F0FDFA] leading-relaxed opacity-90">Maintain an immutable record of every action, ensuring total transparency and accountability across the lifecycle.</p>
+                </div>
+                <div class="bg-white/5 p-8 rounded-xl border border-white/10 hover:bg-white/10 transition-all">
+                    <h4 class="font-bold text-[#14B8A6] mb-3 uppercase text-[10px] tracking-[0.2em]">Maintenance Scheduling</h4>
+                    <p class="text-sm text-[#F0FDFA] leading-relaxed opacity-90">Automate asset health tracking and proactively manage maintenance workflows to prevent operational downtime.</p>
+                </div>
+                <div class="bg-white/5 p-8 rounded-xl border border-white/10 hover:bg-white/10 transition-all">
+                    <h4 class="font-bold text-[#14B8A6] mb-3 uppercase text-[10px] tracking-[0.2em]">Inventory Precision</h4>
+                    <p class="text-sm text-[#F0FDFA] leading-relaxed opacity-90">Achieve 100% accuracy in resource allocation with real-time tracking and comprehensive metadata management.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="bg-white py-24 px-10">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center">
+            <div class="mb-10 md:mb-0">
+                <h3 class="text-4xl font-black text-[#111827] tracking-tighter">GET IN TOUCH</h3>
+                <p class="text-[#6B7280] mt-2 max-w-sm">Our technical team is available to assist with enterprise deployment and system support.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-12">
+                <div>
+                    <span class="block text-[10px] font-black text-[#0F766E] uppercase tracking-widest mb-3">Email Support</span>
+                    <div class="text-xl font-bold text-[#111827]">hz.zaidi@outlook.com</div>
+                </div>
+                <div>
+                    <span class="block text-[10px] font-black text-[#0F766E] uppercase tracking-widest mb-3">Direct Line</span>
+                    <div class="text-xl font-bold text-[#111827]">0312-2539317</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-[#111827] py-16 px-10 text-slate-500">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 border-b border-white/5 pb-12 mb-8">
+                <div>
+                    <h5 class="text-white font-bold mb-4 uppercase tracking-widest text-xs">About AssetFlow</h5>
+                    <p class="text-[13px] leading-relaxed max-w-md">
+                        A specialized enterprise asset management solution designed for digital permanence and operational clarity. Providing organizations in Karachi and beyond with high-performance tracking infrastructure.
+                    </p>
+                </div>
+                <div class="md:text-right">
+                    <h5 class="text-white font-bold mb-4 uppercase tracking-widest text-xs">Location</h5>
+                    <p class="text-[13px] leading-relaxed">
+                        Karachi, Sindh, Pakistan<br>
+                        Contact: 0312-2539317
+                    </p>
+                </div>
+            </div>
+            <div class="flex flex-col md:flex-row justify-between items-center text-[10px] font-bold uppercase tracking-[0.2em]">
+                <span>© 2026 AssetFlow Enterprise</span>
+                <span class="mt-4 md:mt-0 opacity-50">Enterprise Resource Planning & Lifecycle Management</span>
+            </div>
+        </div>
+    </footer>
+
+</div>
+
+<%- include('partials/footer') %>

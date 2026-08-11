@@ -1,0 +1,79 @@
+<%- include('partials/header') %>
+
+<div class="min-h-screen bg-[#F0FDFA] flex items-center justify-center px-10 py-20">
+    <div class="max-w-2xl w-full bg-white rounded-2xl shadow-xl border border-[#CCFBF1] overflow-hidden grid md:grid-cols-5">
+        
+        <!-- Sidebar Branding -->
+        <div class="hidden md:flex md:col-span-2 bg-[#134E4A] p-10 flex-col justify-between text-white">
+            <div>
+                <h3 class="text-2xl font-black tracking-tighter mb-4">AssetFlow</h3>
+                <p class="text-sm text-teal-100 opacity-80 leading-relaxed">Establish your organization's digital permanence with our multi-tenant tracking system.</p>
+            </div>
+            <div class="space-y-4">
+                <div class="flex items-center space-x-3 text-[10px] font-bold uppercase tracking-widest text-[#14B8A6]">
+                    <span class="w-4 h-4 rounded-full border border-[#14B8A6] flex items-center justify-center">1</span>
+                    <span>Register Org</span>
+                </div>
+                <div class="flex items-center space-x-3 text-[10px] font-bold uppercase tracking-widest opacity-40">
+                    <span class="w-4 h-4 rounded-full border border-white flex items-center justify-center">2</span>
+                    <span>Setup Dashboard</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Area -->
+        <div class="md:col-span-3 p-10">
+            <h2 class="text-2xl font-black text-[#111827] tracking-tight mb-6">Register Organization</h2>
+            
+            <!-- Display Error if it exists -->
+            <% if (locals.error) { %>
+                <div class="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 text-xs font-bold uppercase">
+                    <%= error %>
+                </div>
+            <% } %>
+
+            <form action="/register" method="POST" class="space-y-5">
+                <!-- Organization Name -->
+                <div>
+                    <label class="block text-[10px] font-black uppercase tracking-widest text-[#0F766E] mb-2">Organization Name</label>
+                    <input type="text" name="orgName" required placeholder="e.g. Haider & Co." 
+                        class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0F766E] text-sm transition-all">
+                </div>
+
+                <!-- Admin Full Name -->
+                <div>
+                    <label class="block text-[10px] font-black uppercase tracking-widest text-[#0F766E] mb-2">Administrator Name</label>
+                    <input type="text" name="adminName" required placeholder="Your full name" 
+                        class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0F766E] text-sm transition-all">
+                </div>
+
+                <!-- Admin Email -->
+                <div>
+                    <label class="block text-[10px] font-black uppercase tracking-widest text-[#0F766E] mb-2">Work Email</label>
+                    <input type="email" name="adminEmail" required placeholder="admin@company.com" 
+                        class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0F766E] text-sm transition-all">
+                </div>
+
+                <!-- Admin Password -->
+                <div>
+                    <label class="block text-[10px] font-black uppercase tracking-widest text-[#0F766E] mb-2">Account Password</label>
+                    <input type="password" name="adminPassword" required placeholder="••••••••"
+                        class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0F766E] text-sm transition-all">
+                </div>
+
+                <button type="submit" class="w-full bg-[#0F766E] hover:bg-[#14B8A6] text-white py-4 rounded-xl font-bold text-sm shadow-lg transition-all uppercase tracking-widest active:scale-95">
+                    Create Organization
+                </button>
+            </form>
+
+            <p class="mt-6 text-center text-[10px] text-[#6B7280] font-bold">
+                Already registered? <a href="/login" class="text-[#0F766E] hover:underline">Log In</a>
+            </p>
+            <p class="mt-4 text-center">
+                <a href="/" class="text-[12px] text-[#6B7280] font-bold hover:underline">Back to Home</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer') %>
