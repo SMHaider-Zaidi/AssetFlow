@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('../partials/header') %>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+</head>
+<body class="bg-[#F8FAFC] font-sans text-slate-900">
+
+<div class="flex min-h-screen">
+    <%- include('../partials/adminSidebar') %>
+
+    <main class="flex-1 flex flex-col min-w-0 ml-64">
+        <%- include('../partials/navbar') %>
+
+        <div class="p-8 max-w-6xl w-full mx-auto space-y-6">
+            
+            <% if (success) { %>
+                <div class="p-4 bg-teal-50 border border-teal-200 text-[#0F766E] rounded-xl text-xs font-bold flex items-center gap-2 animate-fade-in">
+                    <i class="ti ti-circle-check text-base"></i> <%= success %>
+                </div>
+            <% } %>
+            <% if (error) { %>
+                <div class="p-4 bg-rose-50 border border-rose-200 text-rose-600 rounded-xl text-xs font-bold flex items-center gap-2 animate-fade-in">
+                    <i class="ti ti-alert-circle text-base"></i> <%= error %>
+                </div>
+            <% } %>
+
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-2xl font-bold text-slate-900 tracking-tight">User Directory</h1>
+                    <p class="text-sm text-slate-500">Provision new organizational accounts, manage access authorities, or offboard credentials.</p>
+                </div>
+                
+                <button onclick="toggleUserModal(true)" class="flex items-center gap-2 px-4 py-2.5 bg-[#134E4A] hover:bg-[#0F766E] text-white rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-sm active:scale-95">
+                    <i class="ti ti-user-plus text-base"></i> Add New User
+                </button>
+            </div>
+
+            <div class="bg-white border border-slate-200 rounded-[20px] shadow-sm overflow-hidden">
+                <div class="max-h-[500px] overflow-y-auto custom-scrollbar">
+                    <table class="w-full text-left border-collapse sticky-header">
+                        <thead>
+                            <tr class="bg-slate-50/75 border-b border-slate-100 text-[10px] font-black text-slate-400 uppercase tracking-wider">
+                                <th class="px-6 py-4">Full Identity Name</th>
+                                <th class="px-6 py-4">Corporate Email Access</th>
+                                <th class="px-6 py-4">Role</th>
+                                <th class="px-6 py-4 text-right">Remove Users </th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 text-sm">
+                            <% if (users && users.length > 0) { %>
+                                <% users.forEach(employee => { %>
+                                    <tr class="hover:bg-slate-50/50 transition-all">
+                                        <td class="px-6 py-4 font-bold text-slate-800 flex items-center gap-3">
+                                            <div class="w-7 h-7 rounded-lg bg-slate-100 text-slate-700 font-black text-xs flex items-center justify-center uppercase select-none">
+                                                <%= employee.Name ? employee.Name.charAt(0) : 'U' %>
+                                            </div>
+                                            <%= employee.Name %>
+                                        </td>
+                                        
+                                        <td class="px-6 py-4 text-slate-500 font-medium">
+                                            <%= employee.Email %>
+                                        </td>
+                                        
+                                        <td class="px-6 py-4 text-slate-700 font-medium">
+                                            <%= employee.Role_Name %>
+                                        </td>
+                                        
+                                        <td class="px-6 py-4 text-right">
+                                            <% if (employee.U_id !== user.uId) { %>
+                                                <form action="/admin/users/delete" method="POST" onsubmit="return confirm('CRITICAL SECURITY ACTION:\n\nAre you sure you want to completely erase user profile [<%= employee.Name %>]? This action forces instant session logouts and archives their historical reservation logs.');" class="inline">
+                                                    <input type="hidden" name="uId" value="<%= employee.U_id %>">
+                                                    <input type="hidden" name="targetName" value="<%= employee.Name %>">
+                                                    <button type="submit" class="p-2 bg-rose-50 hover:bg-rose-600 text-rose-600 hover:text-white border border-rose-100 rounded-xl transition-all shadow-sm active:scale-90" title="Revoke Account">
+                                                        <i class="ti ti-trash text-base"></i>
+                                                    </button>
+                                                </form>
+                                            <% } else { %>
+                                                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-300 italic px-2">Active Admin Self</span>
+                                            <% } %>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                            <% } else { %>
+                                <tr>
+                                    <td colspan="4" class="text-center py-16 text-slate-400 italic text-xs">
+                                        No registered personnel users discovered inside this organizational context container.
+                                    </td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<div id="userModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden items-center justify-center z-[100] p-4 transition-all duration-300 opacity-0">
+    <div class="bg-white rounded-[24px] border border-slate-200 shadow-2xl w-full max-w-md overflow-hidden transform scale-95 transition-all duration-300 p-6 space-y-4">
+        
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <div>
+                <h3 class="font-bold text-slate-900 text-[16px]">Provision Corporate Account</h3>
+                <p class="text-[11px] text-slate-400 mt-0.5">Dispatches an automated setup email to the target recipient immediately.</p>
+            </div>
+            <button onclick="toggleUserModal(false)" class="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 transition-all">
+                <i class="ti ti-x text-base"></i>
+            </button>
+        </div>
+
+        <form action="/admin/users/add" method="POST" class="space-y-4">
+            <div>
+                <label class="block text-[10px] font-black uppercase tracking-wider text-slate-400 mb-1.5">User Legal Name</label>
+                <input type="text" name="name" required placeholder="John Doe" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-teal-600 focus:bg-white transition-all font-medium">
+            </div>
+
+            <div>
+                <label class="block text-[10px] font-black uppercase tracking-wider text-slate-400 mb-1.5">Corporate Email Address</label>
+                <input type="email" name="email" required placeholder="johndoe@company.com" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-teal-600 focus:bg-white transition-all font-medium">
+            </div>
+
+            <div>
+                <label class="block text-[10px] font-black uppercase tracking-wider text-slate-400 mb-1.5">Temporary Access Password</label>
+                <input type="password" name="password" required placeholder="••••••••••••" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-teal-600 focus:bg-white transition-all font-medium">
+            </div>
+
+            <div>
+                <label class="block text-[10px] font-black uppercase tracking-wider text-slate-400 mb-1.5">Assigned System Authority Clearance</label>
+                <select name="roleId" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-700 focus:outline-none focus:border-teal-600 focus:bg-white transition-all cursor-pointer">
+                    <option value="2">Employee Personnel Bracket (Standard Privileges)</option>
+                    <option value="1">Administrative Core (Root Management Privileges)</option>
+                </select>
+            </div>
+
+            <div class="pt-2 flex gap-3">
+                <button type="button" onclick="toggleUserModal(false)" class="flex-1 py-2.5 border border-slate-200 rounded-xl text-xs font-black uppercase tracking-wider text-slate-500 hover:bg-slate-50 transition-all">
+                    Cancel
+                </button>
+                <button type="submit" class="flex-1 py-2.5 bg-[#134E4A] hover:bg-[#0F766E] text-white rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-sm">
+                    Add User
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function toggleUserModal(show) {
+    const modal = document.getElementById('userModal');
+    const content = modal.querySelector('.transform');
+    if (show) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        setTimeout(() => {
+            modal.classList.remove('opacity-0');
+            content.classList.remove('scale-95');
+        }, 20);
+    } else {
+        modal.classList.add('opacity-0');
+        content.classList.add('scale-95');
+        setTimeout(() => {
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        }, 300);
+    }
+}
+</script>
+
+<style>
+    /* Table Headers stick to top while body data scrolls dynamically beneath */
+    .sticky-header th { position: sticky; top: 0; z-index: 10; background-color: rgba(248, 250, 252, 0.95); backdrop-filter: blur(4px); }
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #E2E8F0; border-radius: 10px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #CBD5E1; }
+</style>
+
+</body>
+</html>

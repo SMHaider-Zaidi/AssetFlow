@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('../partials/header') %>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+</head>
+<body class="bg-[#F8FAFC] font-sans text-slate-900">
+
+<div class="flex min-h-screen">
+    <%- include('../partials/adminSidebar') %>
+
+    <main class="flex-1 flex flex-col min-w-0 ml-64">
+        <%- include('../partials/navbar') %>
+
+        <div class="p-8 max-w-6xl w-full mx-auto space-y-6">
+            
+            <% if (success) { %>
+                <div class="p-4 bg-teal-50 border border-teal-200 text-[#0F766E] rounded-xl text-xs font-bold flex items-center gap-2 animate-fade-in">
+                    <i class="ti ti-circle-check text-base"></i> <%= success %>
+                </div>
+            <% } %>
+            <% if (error) { %>
+                <div class="p-4 bg-rose-50 border border-rose-200 text-rose-600 rounded-xl text-xs font-bold flex items-center gap-2 animate-fade-in">
+                    <i class="ti ti-alert-circle text-base"></i> <%= error %>
+                </div>
+            <% } %>
+
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Manage Resources</h1>
+                    <p class="text-sm text-slate-500">Track company infrastructure setups, control item visibility, and toggle maintenance flags.</p>
+                </div>
+                
+                <button onclick="toggleResourceModal(true)" class="flex items-center gap-2 px-4 py-2.5 bg-[#134E4A] hover:bg-[#0F766E] text-white rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-sm active:scale-95">
+                    <i class="ti ti-plus text-base"></i> Add New Resource
+                </button>
+            </div>
+
+            <% if (categories && categories.length > 0) { %>
+                <% categories.forEach(cat => { %>
+                    <% const catResources = allResources.filter(asset => asset.Cat_id === cat.Cat_id); %>
+                    
+                    <div class="bg-white border border-slate-200 rounded-[20px] shadow-sm overflow-hidden mb-6">
+                        
+                        <div class="px-6 py-4 bg-slate-50/50 border-b border-slate-100 flex items-center justify-between">
+                            <h2 class="text-xs font-black uppercase tracking-wider text-slate-600 flex items-center gap-2">
+                                <i class="ti ti-folder text-[#134E4A] text-base"></i> <%= cat.Category_Name %>
+                            </h2>
+                            <span class="px-2.5 py-0.5 rounded-md bg-slate-200/60 text-slate-600 font-bold text-[10px]">
+                                <%= catResources.length %> <%= catResources.length === 1 ? 'Asset' : 'Assets' %> Registered
+                            </span>
+                        </div>
+
+                        <div class="max-h-[350px] overflow-y-auto custom-scrollbar">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-slate-50/25 border-b border-slate-100 text-[10px] font-black text-slate-400 uppercase tracking-wider sticky-header">
+                                        <th class="px-6 py-3">Resource Name</th>
+                                        <th class="px-6 py-3">Live Status </th>
+                                        <th class="px-6 py-3">Put Under Maintenance</th>
+                                        <th class="px-6 py-3 text-right">Remove Resource</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100 text-sm">
+                                    <% if (catResources.length > 0) { %>
+                                        <% catResources.forEach(asset => { %>
+                                            <tr class="hover:bg-slate-50/50 transition-all">
+                                                <td class="px-6 py-4 font-bold text-slate-800">
+                                                    <%= asset.Res_name %>
+                                                </td>
+                                                
+                                                <td class="px-6 py-4">
+                                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider 
+                                                        <%= asset.Status === 'Available' ? 'bg-teal-50 text-teal-700 border border-teal-100' : '' %>
+                                                        <%= asset.Status === 'Occupied' ? 'bg-amber-50 text-amber-700 border border-amber-100' : '' %>
+                                                        <%= asset.Status === 'Maintenance' ? 'bg-rose-50 text-rose-700 border border-rose-100' : '' %>">
+                                                        <%= asset.Status %>
+                                                    </span>
+                                                </td>
+                                                
+                                                <td class="px-6 py-4">
+                                                    <form action="/admin/resource/toggle-maintenance" method="POST" class="inline">
+                                                        <input type="hidden" name="resId" value="<%= asset.Res_id %>">
+                                                        <input type="hidden" name="resName" value="<%= asset.Res_name %>">
+                                                        <input type="hidden" name="currentStatus" value="<%= asset.Status %>">
+                                                        <button type="submit" class="px-3 py-1.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-600 text-[11px] font-bold transition-all shadow-sm active:scale-95 inline-flex items-center gap-1.5">
+                                                            <%= asset.Status === 'Maintenance' ? ' Remove Hold' : ' Put Maintenance' %>
+                                                        </button>
+                                                    </form>
+                                                </td>
+                                                
+                                                <td class="px-6 py-4 text-right">
+                                                    <form action="/admin/resource/delete" method="POST" onsubmit="return confirm('Are you sure you want to permanently delete this resource asset? Warning: Wiping an inventory group clears out all currently pending booking slots.');" class="inline">
+                                                        <input type="hidden" name="resId" value="<%= asset.Res_id %>">
+                                                        <input type="hidden" name="name" value="<%= asset.Res_name %>">
+                                                        <button type="submit" class="p-2 bg-rose-50 hover:bg-rose-600 text-rose-600 hover:text-white border border-rose-100 rounded-xl transition-all shadow-sm active:scale-90" title="Delete Resource">
+                                                            <i class="ti ti-trash text-base"></i>
+                                                        </button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        <% }) %>
+                                    <% } else { %>
+                                        <tr>
+                                            <td colspan="4" class="text-center py-8 text-slate-400 italic text-[11px]">
+                                                No equipment or assets mapped within this category group space yet.
+                                            </td>
+                                        </tr>
+                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <div class="text-center p-12 bg-white rounded-[20px] border border-slate-200 text-slate-400 italic text-sm shadow-sm">
+                    No administrative grouping categories defined yet. Add some classification tracks inside the category tab to get started.
+                </div>
+            <% } %>
+
+        </div>
+    </main>
+</div>
+
+<div id="resourceModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden items-center justify-center z-[100] p-4 transition-all duration-300 opacity-0">
+    <div class="bg-white rounded-[24px] border border-slate-200 shadow-2xl w-full max-w-md overflow-hidden transform scale-95 transition-all duration-300 p-6 space-y-4">
+        
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <div>
+                <h3 class="font-bold text-slate-900 text-[16px]">Provision New Corporate Resource</h3>
+                <p class="text-[11px] text-slate-400 mt-0.5">Assets immediately populate company booking schedules once saved.</p>
+            </div>
+            <button onclick="toggleResourceModal(false)" class="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 transition-all">
+                <i class="ti ti-x text-base"></i>
+            </button>
+        </div>
+
+        <form action="/admin/resource/add" method="POST" class="space-y-4">
+            <div>
+                <label class="block text-[10px] font-black uppercase tracking-wider text-slate-400 mb-1.5">Asset Descriptive Label Name</label>
+                <input type="text" name="name" required placeholder="e.g. Conference Boardroom Delta Suite" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-teal-600 focus:bg-white transition-all font-medium">
+            </div>
+
+            <div>
+                <label class="block text-[10px] font-black uppercase tracking-wider text-slate-400 mb-1.5">Categorization Bracket Group</label>
+                <div class="relative">
+                    <select name="categoryId" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-teal-600 focus:bg-white transition-all font-bold text-slate-700 appearance-none cursor-pointer pr-10">
+                        <% if (categories && categories.length > 0) { %>
+                            <% categories.forEach(cat => { %>
+                                <option value="<%= cat.Cat_id %>"><%= cat.Category_Name %></option>
+                            <% }) %>
+                        <% } else { %>
+                            <option value="" disabled>Please add a category grouping track first...</option>
+                        <% } %>
+                    </select>
+                    <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-slate-400">
+                        <i class="ti ti-chevron-down text-base"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-2 flex gap-3">
+                <button type="button" onclick="toggleResourceModal(false)" class="flex-1 py-2.5 border border-slate-200 rounded-xl text-xs font-black uppercase tracking-wider text-slate-500 hover:bg-slate-50 transition-all">
+                    Cancel 
+                </button>
+                <button type="submit" <% if (!categories || categories.length === 0) { %> disabled class="flex-1 py-2.5 bg-slate-200 text-slate-400 rounded-xl text-xs font-black uppercase tracking-wider cursor-not-allowed" <% } else { %> class="flex-1 py-2.5 bg-[#134E4A] hover:bg-[#0F766E] text-white rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-sm" <% } %>>
+                    Add Asset
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function toggleResourceModal(show) {
+    const modal = document.getElementById('resourceModal');
+    const content = modal.querySelector('.transform');
+    if (show) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        setTimeout(() => {
+            modal.classList.remove('opacity-0');
+            content.classList.remove('scale-95');
+        }, 20);
+    } else {
+        modal.classList.add('opacity-0');
+        content.classList.add('scale-95');
+        setTimeout(() => {
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        }, 300);
+    }
+}
+</script>
+
+<style>
+    .sticky-header th { position: sticky; top: 0; z-index: 10; background-color: rgba(248, 250, 252, 0.95); backdrop-filter: blur(4px); }
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #E2E8F0; border-radius: 10px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #CBD5E1; }
+</style>
+
+</body>
+</html>

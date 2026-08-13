@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('../partials/header') %>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+</head>
+<body class="bg-[#F8FAFC] font-sans text-slate-900">
+
+<div class="flex min-h-screen">
+    <%- include('../partials/adminSidebar') %>
+
+    <main class="flex-1 flex flex-col min-w-0 ml-64">
+        <%- include('../partials/navbar') %>
+
+        <div class="p-8 max-w-4xl w-full mx-auto space-y-6">
+            
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-2xl font-bold text-slate-900 tracking-tight">System Audit Trails</h1>
+                    <p class="text-sm text-slate-500">Unrestricted monitoring ledger mapping user configurations, modifications, and system events.</p>
+                </div>
+                
+                <a href="/admin/download-logs" class="flex items-center gap-2 px-4 py-2.5 bg-[#134E4A] hover:bg-[#0F766E] text-white rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-sm active:scale-95">
+                    <i class="ti ti-download text-base"></i> Export Logs (CSV)
+                </a>
+            </div>
+
+            <div class="bg-white border border-slate-200 rounded-[20px] p-6 shadow-sm max-h-[600px] overflow-y-auto custom-scrollbar space-y-4 divide-y divide-slate-100">
+                <% if (logs && logs.length > 0) { %>
+                    <% logs.forEach((log, index) => { %>
+                        <div class="flex items-start gap-4 text-xs leading-relaxed <%= index === 0 ? '' : 'pt-3.5' %>">
+                            <div class="w-8 h-8 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center flex-shrink-0 text-slate-400 mt-0.5">
+                                <i class="ti ti-fingerprint text-base"></i>
+                            </div>
+                            
+                            <div class="flex-1 min-w-0">
+                                <p class="text-slate-600 break-words">
+                                    <span class="font-bold text-slate-800"><%= log.Name || 'System Service Engine' %></span> 
+                                    <%= log.Action %>
+                                </p>
+                                <span class="text-[10px] text-slate-400 font-bold tracking-tight block mt-1">
+                                    <%= new Date(log.Timestamp).toLocaleString() %>
+                                </span>
+                            </div>
+                        </div>
+                    <% }) %>
+                <% } else { %>
+                    <div class="text-center py-16 text-slate-400 text-xs italic">
+                        No historical administrative logs recorded under this corporate workspace profile.
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </main>
+</div>
+
+<style>
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #E2E8F0; border-radius: 10px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #CBD5E1; }
+</style>
+
+</body>
+</html>

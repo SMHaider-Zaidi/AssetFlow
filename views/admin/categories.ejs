@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('../partials/header') %>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+</head>
+<body class="bg-[#F8FAFC] font-sans text-slate-900">
+
+<div class="flex min-h-screen">
+    <%- include('../partials/adminSidebar') %>
+
+    <main class="flex-1 flex flex-col min-w-0 ml-64">
+        <%- include('../partials/navbar') %>
+
+        <div class="p-8 max-w-xl w-full mx-auto space-y-6">
+            
+            <% if (success) { %>
+                <div class="p-4 bg-teal-50 border border-teal-200 text-[#0F766E] rounded-xl text-xs font-bold flex items-center gap-2">
+                    <i class="ti ti-circle-check text-base"></i> <%= success %>
+                </div>
+            <% } %>
+            <% if (error) { %>
+                <div class="p-4 bg-rose-50 border border-rose-200 text-rose-600 rounded-xl text-xs font-bold flex items-center gap-2">
+                    <i class="ti ti-alert-circle text-base"></i> <%= error %>
+                </div>
+            <% } %>
+
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Resource Categories</h1>
+                    <p class="text-sm text-slate-500">Configure core structural classification labels for system assets.</p>
+                </div>
+                <button onclick="toggleCatModal(true)" class="p-2.5 bg-[#134E4A] hover:bg-[#0F766E] text-white rounded-xl transition-all shadow-sm active:scale-95 flex items-center justify-center" title="Create Category Group">
+                    <i class="ti ti-plus text-base"></i>
+                </button>
+            </div>
+
+            <div class="bg-white border border-slate-200 rounded-[20px] shadow-sm max-h-[520px] overflow-y-auto custom-scrollbar divide-y divide-slate-100">
+                <% if (categories && categories.length > 0) { %>
+                    <% categories.forEach(cat => { %>
+                        <div class="flex items-center justify-between px-6 py-4.5 hover:bg-slate-50/40 transition-all">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400">
+                                    <i class="ti ti-tags text-sm"></i>
+                                </div>
+                                <div class="flex flex-col">
+                                    <span class="font-bold text-slate-800 text-sm"><%= cat.Category_Name %></span>
+                                    <span class="text-[11px] text-slate-400 font-medium">
+                                        Max Limit: <%= cat.Max_Duration_Minutes ? cat.Max_Duration_Minutes + ' mins' : 'Unlimited' %>
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <form action="/admin/category/delete" method="POST" onsubmit="return confirm('Are you sure you want to permanently delete this structural category bracket? Warning: Ensure no active resources are presently mapped to this grouping.');">
+                                <input type="hidden" name="catId" value="<%= cat.Cat_id %>">
+                                <input type="hidden" name="categoryName" value="<%= cat.Category_Name %>">
+                                <button type="submit" class="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 border border-transparent hover:border-rose-100 rounded-xl transition-all active:scale-90" title="Delete Category">
+                                    <i class="ti ti-trash text-base"></i>
+                                </button>
+                            </form>
+                        </div>
+                    <% }) %>
+                <% } else { %>
+                    <div class="p-12 text-center text-slate-400 italic text-xs">
+                        No resource classification brackets configured inside this cluster.
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </main>
+</div>
+
+<div id="catModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden items-center justify-center z-[100] p-4 transition-all duration-300 opacity-0">
+    <div class="bg-white rounded-[24px] border border-slate-200 shadow-2xl w-full max-w-sm p-6 space-y-4 transform scale-95 transition-all duration-300">
+        <div>
+            <h3 class="font-bold text-slate-900 text-[15px]">Create Classification Bracket</h3>
+            <p class="text-[11px] text-slate-400 mt-0.5">Define high-level tags to filter system logistics cleanly.</p>
+        </div>
+        
+        <form action="/admin/category/add" method="POST" class="space-y-4">
+            <div>
+                <label class="block text-[10px] font-black uppercase tracking-wider text-slate-400 mb-1.5">Group Classification Name</label>
+                <input type="text" name="name" required placeholder="e.g. AV Hardware, Boardrooms" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-teal-600 focus:bg-white transition-all font-medium">
+            </div>
+
+            <div>
+                <label class="block text-[10px] font-black uppercase tracking-wider text-slate-400 mb-1.5">Max Booking Duration (Minutes)</label>
+                <input type="number" name="maxDuration" placeholder="Leave empty for unlimited time" min="1" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-teal-600 focus:bg-white transition-all font-medium">
+            </div>
+            
+            <div class="flex gap-3 pt-1">
+                <button type="button" onclick="toggleCatModal(false)" class="flex-1 py-2 border border-slate-200 rounded-xl text-xs font-black uppercase tracking-wider text-slate-400 hover:bg-slate-50 transition-all">
+                    Cancel
+                </button>
+                <button type="submit" class="flex-1 py-2 bg-[#134E4A] hover:bg-[#0F766E] text-white rounded-xl text-xs font-black uppercase tracking-wider shadow-sm transition-all">
+                    Add Category
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function toggleCatModal(show) {
+    const modal = document.getElementById('catModal');
+    const content = modal.querySelector('.transform');
+    if (show) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        setTimeout(() => {
+            modal.classList.remove('opacity-0');
+            content.classList.remove('scale-95');
+        }, 20);
+    } else {
+        modal.classList.add('opacity-0');
+        content.classList.add('scale-95');
+        setTimeout(() => {
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        }, 300);
+    }
+}
+</script>
+
+<style>
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #E2E8F0; border-radius: 10px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #CBD5E1; }
+</style>
+
+</body>
+</html>

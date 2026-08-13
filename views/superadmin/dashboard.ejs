@@ -1,0 +1,111 @@
+<%- include('../partials/header') %>
+
+<div class="min-h-screen bg-slate-50 flex">
+    <%- include('../partials/sidebar') %>
+
+    <div class="flex-1 flex flex-col">
+        <%- include('../partials/navbar') %>
+
+        <main class="p-8 space-y-8">
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center space-x-4">
+                    <div class="p-3 bg-emerald-50 rounded-lg text-emerald-600">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-10V4m0 10V4m-4 6h4"></path></svg>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-slate-500 uppercase tracking-wider">Total Organizations</p>
+                        <h3 class="text-2xl font-bold text-slate-900"><%= stats.total_orgs %></h3>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center space-x-4">
+                    <div class="p-3 bg-teal-50 rounded-lg text-teal-600">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-slate-500 uppercase tracking-wider">Active Users</p>
+                        <h3 class="text-2xl font-bold text-slate-900"><%= stats.total_active_users %></h3>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center space-x-4">
+                    <div class="p-3 bg-[#f0fdfa] rounded-lg text-[#0F766E]">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-slate-500 uppercase tracking-wider">System Resources</p>
+                        <h3 class="text-2xl font-bold text-slate-900"><%= stats.total_resources %></h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden flex flex-col">
+                    <div class="p-6 border-b border-slate-50 flex justify-between items-center">
+                        <h3 class="text-lg font-bold text-slate-900">Global Audit Logs</h3>
+                    </div>
+                    
+                    <div class="overflow-x-auto overflow-y-auto max-h-[550px] custom-scrollbar">
+                        <table class="w-full text-left border-collapse">
+                            <thead class="bg-slate-50 text-slate-400 text-xs uppercase font-semibold sticky top-0 z-10 shadow-sm">
+                                <tr>
+                                    <th class="px-6 py-4 bg-slate-50">User</th>
+                                    <th class="px-6 py-4 bg-slate-50">Organization</th>
+                                    <th class="px-6 py-4 bg-slate-50">Action</th>
+                                    <th class="px-6 py-4 bg-slate-50">Timestamp</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-50">
+                                <% globalLogs.forEach(log => { %>
+                                    <tr class="hover:bg-slate-50 transition-colors">
+                                        <td class="px-6 py-4 font-medium text-slate-700 text-sm"><%= log.user_name %></td>
+                                        <td class="px-6 py-4 text-slate-500 text-sm"><%= log.org_name %></td>
+                                        <td class="px-6 py-4">
+                                            <span style="font-size: 9px;" class="font-bold text-slate-600 uppercase tracking-tight">
+                                                <%= log.action %>
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 text-slate-400 text-sm">
+                                            <%= new Date(log.timestamp).toLocaleString() %>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                        <h3 class="text-lg font-bold text-slate-900 mb-4">Recent Organizations</h3>
+                        <div class="space-y-4">
+                            <% recentOrgs.forEach(org => { %>
+                                <div class="p-4 border border-slate-100 rounded-xl hover:border-teal-200 transition-all group">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <h4 class="font-bold text-slate-800"><%= org.Org_Name %></h4>
+                                            <p class="text-xs text-slate-400 font-medium uppercase">ID: <%= org.Org_id %></p>
+                                        </div>
+                                    
+                                    </div>
+                                </div>
+                            <% }) %>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+</div>
+
+<style>
+    .custom-scrollbar::-webkit-scrollbar { width: 5px; height: 5px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #E2E8F0; border-radius: 9999px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #CBD5E1; }
+</style>
+
+<%- include('../partials/footer') %>

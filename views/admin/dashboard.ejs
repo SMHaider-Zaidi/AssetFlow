@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('../partials/header') %>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+</head>
+<body class="bg-[#F8FAFC] font-sans text-slate-900">
+
+<div class="flex min-h-screen">
+    <%- include('../partials/adminSidebar') %>
+
+    <main class="flex-1 flex flex-col min-w-0 ml-64">
+        <%- include('../partials/navbar') %>
+
+        <div class="p-8 max-w-6xl w-full mx-auto space-y-8">
+            
+            <div>
+                <h1 class="text-2xl font-bold text-slate-900 tracking-tight">System Console Overview</h1>
+                <p class="text-sm text-slate-500">Real-time infrastructure capacity metrics, user scaling, and live log snapshots.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
+                <div class="bg-white border border-slate-200 p-5 rounded-[20px] shadow-sm flex items-center gap-4">
+                    <div class="w-11 h-11 rounded-xl bg-teal-50 text-[#0F766E] flex items-center justify-center text-xl">
+                        <i class="ti ti-calendar-event"></i>
+                    </div>
+                    <div>
+                        <span class="block text-[10px] font-black uppercase tracking-wider text-slate-400">Live Active Bookings</span>
+                        <span class="text-xl font-bold text-slate-800 tracking-tight"><%= stats.activeBookings %></span>
+                    </div>
+                </div>
+
+                <div class="bg-white border border-slate-200 p-5 rounded-[20px] shadow-sm flex items-center gap-4">
+                    <div class="w-11 h-11 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl">
+                        <i class="ti ti-server"></i>
+                    </div>
+                    <div>
+                        <span class="block text-[10px] font-black uppercase tracking-wider text-slate-400">Total System Resources</span>
+                        <span class="text-xl font-bold text-slate-800 tracking-tight"><%= stats.totalResources %></span>
+                    </div>
+                </div>
+
+                <div class="bg-white border border-slate-200 p-5 rounded-[20px] shadow-sm flex items-center gap-4">
+                    <div class="w-11 h-11 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl">
+                        <i class="ti ti-users"></i>
+                    </div>
+                    <div>
+                        <span class="block text-[10px] font-black uppercase tracking-wider text-slate-400">Registered Users</span>
+                        <span class="text-xl font-bold text-slate-800 tracking-tight"><%= stats.totalUsers %></span>
+                    </div>
+                </div>
+
+                <div class="bg-white border border-slate-200 p-5 rounded-[20px] shadow-sm flex items-center gap-4">
+                    <div class="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl">
+                        <i class="ti ti-chart-pie-2"></i>
+                    </div>
+                    <div>
+                        <span class="block text-[10px] font-black uppercase tracking-wider text-slate-400">Utilization Rate</span>
+                        <span class="text-xl font-bold text-slate-800 tracking-tight"><%= stats.utilizationRate %></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-base font-bold text-slate-800 tracking-tight">Recent System Security Activity</h3>
+                        <p class="text-xs text-slate-400">Quick-glance overview of the last 10 audit trails processed by cluster users.</p>
+                    </div>
+                    <a href="/admin/logs" class="text-xs font-bold text-[#0F766E] hover:text-[#0D665F] hover:underline transition-all">
+                        View Full Historical Records &rarr;
+                    </a>
+                </div>
+
+                <div class="bg-white border border-slate-200 rounded-[20px] shadow-sm p-5 max-h-[420px] overflow-y-auto divide-y divide-slate-50 custom-scrollbar">
+                    <% if (logs && logs.length > 0) { %>
+                        <% logs.forEach(log => { %>
+                            <div class="flex items-start gap-4 py-3.5 first:pt-1 last:pb-1 text-xs">
+                                <div class="w-7 h-7 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-center flex-shrink-0 text-slate-400 mt-0.5">
+                                    <i class="ti ti-history text-sm"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="text-slate-600 leading-relaxed">
+                                        <span class="font-bold text-slate-800"><%= log.Name || 'System Automated Task' %></span> 
+                                        <%= log.Action %>
+                                    </p>
+                                    <span class="text-[10px] text-slate-400 font-bold block mt-1 tracking-tight">
+                                        <%= new Date(log.Timestamp).toLocaleString() %>
+                                    </span>
+                                </div>
+                            </div>
+                        <% }) %>
+                    <% } else { %>
+                        <div class="text-center py-12 text-slate-400 italic text-xs">
+                            No recent system transaction records have been submitted under this organizational domain.
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+
+        </div>
+    </main>
+</div>
+
+<style>
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #E2E8F0; border-radius: 10px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #CBD5E1; }
+</style>
+
+</body>
+</html>

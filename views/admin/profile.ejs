@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('../partials/header') %>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+</head>
+<body class="bg-[#F8FAFC] font-sans text-slate-900">
+
+<div class="flex min-h-screen">
+    <%- include('../partials/adminSidebar') %>
+
+    <main class="flex-1 flex flex-col min-w-0 ml-64">
+        <%- include('../partials/navbar') %>
+
+        <div class="flex-1 flex items-center justify-center p-8">
+            <div class="w-full max-w-sm">
+
+                <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+
+                    <div class="bg-[#134E4A] px-6 pt-8 pb-10 flex flex-col items-center">
+                        <div class="w-16 h-16 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center mb-3 shadow-inner select-none">
+                            <span class="text-2xl font-bold text-white">
+                                <%= user.userName ? user.userName.charAt(0).toUpperCase() : 'A' %>
+                            </span>
+                        </div>
+                        <h2 class="text-base font-bold text-white tracking-tight"><%= user.userName %></h2>
+                        <span class="mt-2 inline-flex items-center gap-1 text-[10px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-amber-500/20 border border-amber-400/30 text-amber-200">
+                            <i class="ti ti-shield-check text-xs"></i>
+                            Administrative Core
+                        </span>
+                    </div>
+
+                    <div class="px-6 py-5 space-y-4 -mt-1">
+
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center flex-shrink-0">
+                                <i class="ti ti-user text-slate-400 text-sm"></i>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Security Node Identification</p>
+                                <p class="text-sm font-semibold text-slate-800"><%= user.userName %></p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center flex-shrink-0">
+                                <i class="ti ti-id-badge text-slate-400 text-sm"></i>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Assigned System Clearance</p>
+                                <p class="text-sm font-semibold text-slate-800"><%= user.role || 'Admin' %></p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-teal-50 flex items-center justify-center flex-shrink-0">
+                                <i class="ti ti-building text-teal-500 text-sm"></i>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Assigned Corporate Token Group</p>
+                                <p class="text-sm font-semibold text-slate-800">
+                                    <%= typeof organization !== 'undefined' && organization ? organization.Org_name : (user.orgName || 'Global Root Context') %>
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="px-6 pb-6">
+                        <a href="/logout"
+                           class="flex items-center justify-center gap-2 w-full py-2.5 bg-white border border-slate-200 rounded-xl text-[11px] font-black uppercase tracking-widest text-red-500 hover:bg-rose-50 hover:border-rose-200 transition-all shadow-sm active:scale-95">
+                            <i class="ti ti-logout text-sm"></i>
+                            Sign Out
+                        </a>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </main>
+</div>
+
+</body>
+</html>

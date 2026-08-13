@@ -1,0 +1,63 @@
+<%- include('../partials/header') %>
+
+<div class="min-h-screen bg-slate-50 flex">
+    <%- include('../partials/sidebar') %>
+
+    <div class="flex-1 flex flex-col">
+        <%- include('../partials/navbar') %>
+
+        <main class="p-8 space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-2xl font-black text-slate-900 tracking-tight">Organization Management</h2>
+                    <p class="text-slate-500 text-sm">View all registered entities in AssetFlow.</p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="bg-slate-50 text-slate-400 text-xs uppercase font-semibold">
+                            <tr>
+                                <th class="px-6 py-4">ID</th>
+                                <th class="px-6 py-4">Organization Name</th>
+                                <th class="px-6 py-4">Joined Date</th>
+                                <th class="px-6 py-4">Joined Time</th>
+                                <th class="px-6 py-4 text-right">View Details</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-50">
+                            <% organizations.forEach(organization => { %>
+                                <tr class="hover:bg-slate-50/50 transition-colors group">
+                                    <td class="px-6 py-4 text-xs font-mono text-slate-700">#<%= organization.Org_id %></td>
+                                    <td class="px-6 py-4">
+                                        <div class="font-bold text-slate-800 text-sm"><%= organization.Org_Name %></div>
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-slate-500">
+                                        <%= new Date(organization.Created_At).toLocaleDateString() %>
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-slate-400">
+                                        <%= new Date(organization.Created_At).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) %>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <div class="flex justify-end">
+                                            <a href="/superadmin/organization/<%= organization.Org_id %>" title="View Details" 
+                                               class="p-2 text-slate-400 hover:text-[#0F766E] hover:bg-emerald-50 rounded-lg transition-all">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                                </svg>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>
