@@ -27,8 +27,8 @@ export const login = async (req, res, next) =>{
         }
         const user = await db.findUserByEmail(email);
         if (user){
-            //const passwordMatch = await bcrypt.compare(password, user.Password);
-            const passwordMatch = (password === user.Password); // For testing only
+            const passwordMatch = await bcrypt.compare(password, user.Password);
+            //const passwordMatch = (password === user.Password); // For testing only
             if (passwordMatch){
                 const roleName = await db.findRoleName(user.Role_id);
                 req.session.user= {
